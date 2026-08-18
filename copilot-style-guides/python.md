@@ -6,9 +6,10 @@ or anything outside these categories.
 
 ---
 
-## 1. Indentation
+## 1. Indentation and Line Length
 
 All indentation must use 4 spaces. Tabs are never permitted.
+Lines must not exceed 120 characters.
 
 ### ✅ Correct
 ```python
@@ -30,6 +31,11 @@ def getAssetById(assetId: int) -> Asset:
 		return db.query(assetId)
 ```
 
+```python
+# Line exceeds 120 characters — flag this
+result = someFunction(argumentOne, argumentTwo, argumentThree, argumentFour, argumentFive, argumentSix, argumentSeven)
+```
+
 ---
 
 ## 2. Naming Conventions
@@ -40,6 +46,7 @@ def getAssetById(assetId: int) -> Asset:
 | Variables | camelCase | `lastValidTime` |
 | Classes | TitleCase (all words capitalised, no separators) | `AssetOperatingRecord` |
 | Constants | SCREAMING_SNAKE_CASE | `MAX_OPERATING_HOURS` |
+| Test functions (in `unit_test.py` or `IntegrationTests/`) | `test_` prefix + snake_case | `test_calculate_operating_time` |
 
 ### ✅ Correct
 ```python
@@ -74,6 +81,32 @@ def calculate_operating_time(asset_id: int) -> None:   # function in snake_case 
 
 ```python
 def CalculateOperatingTime(assetId: int) -> None:      # function in TitleCase — flag
+    ...
+```
+
+Test functions in `unit_test.py` or anywhere under `IntegrationTests/` must be
+prefixed with `test_` and written in snake_case. Regular camelCase rules do NOT
+apply to test functions.
+
+### ✅ Correct — test functions
+```python
+# in unit_test.py or IntegrationTests/
+def test_calculate_operating_time_when_asset_stops():
+    ...
+
+def test_get_asset_by_id_returns_none_for_missing():
+    ...
+```
+
+### ❌ Incorrect — flag these test functions
+```python
+def calculateOperatingTime():        # camelCase, missing test_ prefix — flag both
+    ...
+
+def test_calculateOperatingTime():   # test_ present but camelCase body — flag
+    ...
+
+def testCalculateOperatingTime():    # no underscore separator — flag
     ...
 ```
 
@@ -248,7 +281,39 @@ for asset in assets:
 
 ---
 
-## 8. Null / None Safety
+## 8. Comments
+
+All inline and standalone comments must use `#` and be written as full sentences —
+capitalised first word and a period at the end. Do NOT flag docstrings under this rule.
+
+### ✅ Correct
+```python
+# Retrieve the last valid time before the asset stopped.
+lastTime = lastValidTimes.get(assetId)
+
+result = compute(assetId)  # Return early if the asset has no operating history.
+```
+
+### ❌ Incorrect — flag these
+```python
+# get last valid time          # not a full sentence, no capital, no period — flag
+lastTime = lastValidTimes.get(assetId)
+
+result = compute(assetId)  # return early    # lowercase, no period — flag
+
+# TODO: fix this later         # not a full sentence — flag
+```
+
+### Rules
+- Must start with `# ` (hash + space)
+- First word capitalised
+- Must end with a period
+- Flag `#word` with no space after `#`
+- Do NOT apply this rule to docstrings (`"""`)
+
+---
+
+## 9. Null / None Safety
 
 Flag any location where a value that could be `None` is accessed without a prior guard.
 Do NOT prescribe a specific guard style — flag the issue and leave the fix to the developer.
@@ -298,13 +363,72 @@ determine whether that attribute is nullable. Only flag if the field is defined 
 
 ---
 
+## 10. Inline SQL
+
+SQL strings embedded in Python must be assigned to a SCREAMING_SNAKE_CASE constant
+and written as a triple-quoted `"""` block. SQL keywords and clauses must follow the
+formatting rules below. Do NOT flag SQL that is dynamically built via string
+formatting — only flag static SQL string assignments.
+
+### Rules
+- Assigned to a module-level constant (`SCREAMING_SNAKE_CASE = """..."""`)
+- Opening `"""` on the same line as the constant assignment; closing `"""` on its own line
+- `SELECT`, `FROM`, `WHERE`, `JOIN`, `ON`, `GROUP BY`, `ORDER BY`, `HAVING`, `LIMIT` each on their own line, in UPPERCASE
+- Each selected column on its own indented line
+- Each `JOIN` on its own indented line
+- Column aliases use backtick quoting: `` a.asset_id `assetId` ``
+- Statement ends with `;` inside the closing `"""`
+
+### ✅ Correct
+```python
+DEVICE_IDENTIFIER_SQL = """
+SELECT
+    a.asset_id `assetId`,
+    d.identifier `deviceIdentifier`
+FROM
+    rpm.tmp_asset_ids tmp
+    JOIN rpm.asset a ON (a.asset_id = tmp.asset_id)
+    JOIN rpm.device d ON(d.device_id = a.device_id)
+    JOIN rpm.asset_company ac ON(ac.asset_id = a.asset_id)
+    JOIN rpm.company c ON(c.company_id = ac.company_id)
+WHERE
+    c.code = 'RAIN';
+"""
+```
+
+### ❌ Incorrect — flag these
+```python
+# All on one line — flag
+deviceIdentifierSql = "SELECT a.asset_id, d.identifier FROM rpm.asset a JOIN rpm.device d ON d.device_id = a.device_id"
+```
+
+```python
+# Not assigned to a constant (camelCase variable) — flag
+deviceIdentifierSql = """
+SELECT
+    a.asset_id `assetId`
+FROM
+    rpm.asset a;
+"""
+```
+
+```python
+# Keywords not on their own lines — flag
+DEVICE_SQL = """
+SELECT a.asset_id, d.identifier FROM rpm.asset a
+JOIN rpm.device d ON d.device_id = a.device_id WHERE a.active = 1;
+"""
+```
+
+---
+
 ## Output Format
 
 For each issue found, respond with:
 
 - **File**: `path/to/file.py`
 - **Line**: 42
-- **Category**: Indentation | Naming | Docstring | Type Hints | String Formatting | Function Length | Comprehension | Null Safety
+- **Category**: Indentation | Line Length | Naming | Test Naming | Docstring | Type Hints | String Formatting | Comments | Function Length | Comprehension | Inline SQL | Null Safety
 - **Issue**: one-sentence description
 - **Suggestion**: minimal fix or split point (for Function Length: describe the extracted function, do not rewrite)
 
