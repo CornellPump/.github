@@ -86,12 +86,14 @@ Every **public** function (not prefixed with `_`) must have a multi-line docstri
 immediately after the `def` line. Single-line docstrings are not permitted.
 Private/internal functions (prefixed with `_`) do not require docstrings.
 
+Do NOT review or comment on the content of the docstring — only check that the
+correct structure is present.
+
 ### Pattern
 ```python
 def functionName(param: type) -> returnType:
     """
-    [Description of what the function does and any important return
-    or side-effect behaviour. Wrap at 100 characters.]
+    Any text here.
     """
 ```
 
@@ -101,8 +103,7 @@ def calculateOperatingTimeAfterAssetStops(
     assetId: int, time: datetime, lastValidTimes: dict, operatingTimes: dict
 ) -> None:
     """
-    When an asset stops running, calculate the operating hours of the time from when the asset
-    had low speed, low load, and/or high soot until the asset stopped running.
+    Any description at all.
     """
     ...
 
@@ -113,7 +114,7 @@ def _computeInternalOffset(assetId: int) -> int:
 
 ### ❌ Incorrect — flag these
 ```python
-# Missing docstring entirely
+# Missing docstring entirely — flag this
 def calculateOperatingTime(assetId: int) -> None:
     operatingTimes[assetId] = compute(assetId)
 ```
@@ -135,20 +136,11 @@ def getAssetById(assetId: int) -> Asset:
     ...
 ```
 
-```python
-# Docstring describes HOW, not WHAT — flag this
-def calculateOperatingTime(assetId: int) -> None:
-    """
-    Loops through lastValidTimes dict and calls compute() on each entry.
-    """
-    ...
-```
-
 ### Rules
-- Opening `"""` on its own line, then the definition sentences; closing `"""` on its own line
-- Minimum structure: `"""`, content line(s), `"""` — at least 3 lines total
-- Describe WHAT the function does and any return value or side-effect behavior
-- Do NOT describe internal implementation details
+- `"""` on its own line, content on the next line(s), closing `"""` on its own line
+- Minimum structure: 3 lines total (`"""` / content / `"""`)
+- Must appear on the line immediately after the `def` signature
+- Do NOT flag or comment on what the docstring says
 
 ---
 
