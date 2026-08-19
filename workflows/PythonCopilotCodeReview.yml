@@ -27,8 +27,8 @@ jobs:
         id: app-token
         uses: actions/create-github-app-token@v1
         with:
-          app-id: ${{ secrets.ORG_STYLE_GUIDE_APP_ID }}
-          private-key: ${{ secrets.ORG_STYLE_GUIDE_APP_KEY }}
+          app-id: ${{ secrets.RPM_SQUARED_GITHUB_APP_ID }}
+          private-key: ${{ secrets.RPM_SQUARED_GITHUB_APP_KEY }}
           owner: ${{ github.repository_owner }}
           repositories: .github    # token is scoped to this repo only
 
