@@ -2,6 +2,11 @@ name: Python Copilot Code Review
 
 on:
   workflow_call:                   # makes this reusable — called from individual repos
+    secrets:
+      RPM_SQUARED_GITHUB_APP_ID:
+        required: true
+      RPM_SQUARED_GITHUB_APP_KEY:
+        required: true
 
 # Skip draft PRs entirely
 concurrency:
