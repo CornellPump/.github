@@ -1,0 +1,10 @@
+name: Keepalive
+
+on:
+  workflow_dispatch:
+
+jobs:
+  noop:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Actions enabled"
