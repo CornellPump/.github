@@ -1,8 +1,12 @@
-# Python Style Guide — Copilot PR Review Instructions
+---
+applyTo: "**/*.py"
+---
 
-Review ONLY the changed lines in this PR. For Python files, flag issues in the
-following categories only. Do NOT comment on logic, architecture, performance,
-or anything outside these categories.
+# Python Style Guide
+
+Review ONLY the changed lines in this PR. Flag issues in the following categories
+only. Do NOT comment on logic, architecture, performance, or anything outside these
+categories.
 
 ---
 
@@ -62,7 +66,6 @@ class AssetOperatingRecord:
 ### ❌ Incorrect — flag these
 ```python
 max_operating_hours = 24          # constant in snake_case — flag
-DEFAULT_SOOT_THRESHOLD = 0.85     # correct
 ```
 
 ```python
@@ -215,8 +218,8 @@ label = "No interpolation needed"           # plain string — fine
 
 ### ❌ Incorrect — flag these
 ```python
-message = "Asset {} stopped at {}".format(assetId, time)   # .format() — flag
-message = "Asset %s stopped at %s" % (assetId, time)       # % formatting — flag
+message = "Asset {} stopped at {}".format(assetId, time)        # .format() — flag
+message = "Asset %s stopped at %s" % (assetId, time)            # % formatting — flag
 message = "Asset " + str(assetId) + " stopped at " + str(time)  # concatenation with interpolation — flag
 ```
 
