@@ -28,3 +28,4 @@ QA tests that call the **live deployed API** with real Cognito credentials. Not 
 - **Naming here is resource- and verb-based**, not function-based. Classes are `Test_<Resource>`
   (`Test_AlertLog`, `Test_Assetgroup`); test functions are named for the HTTP verb
   (e.g., `test_getRequest` / `test_postRequest`) and should keep casing consistent within a file. The scenario belongs in the `id=` label, not the function name.
+  Test are in a nested URL structure with with classes starting with Test_ or test_
