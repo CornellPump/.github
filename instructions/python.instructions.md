@@ -50,7 +50,7 @@ result = someFunction(argumentOne, argumentTwo, argumentThree, argumentFour, arg
 | Variables | camelCase | `lastValidTime` |
 | Classes | TitleCase (all words capitalised, no separators) | `AssetOperatingRecord` |
 | Constants | SCREAMING_SNAKE_CASE | `MAX_OPERATING_HOURS` |
-| Test functions (in `unit_test.py` or `IntegrationTests/`) | `test_` prefix + snake_case | `test_calculate_operating_time` |
+| Test functions | `test_` prefix + camelCased parts separated by underscores | `test_myFunction_rejectsInvalidRequest` |
 
 ### ✅ Correct
 ```python
@@ -87,29 +87,41 @@ def CalculateOperatingTime(assetId: int) -> None:      # function in TitleCase �
     ...
 ```
 
-Test functions in `unit_test.py` or anywhere under `IntegrationTests/` must be
-prefixed with `test_` and written in snake_case. Regular camelCase rules do NOT
-apply to test functions.
+### Test Naming Exception
+
+Tests are an exception to the regular camelCase naming rule. Pytest requires every
+ test function name to begin with `test_`. After the `test_` prefix, the test name must
+ contain the name of the function being tested and the path or behavior being tested as
+ camelCased parts separated by underscores.
+
+The `test_` prefix and underscore separators are required. The function name and the
+path or behavior being tested must use camelCase. This naming rule applies to all test
+functions, including tests in `unit_test.py` and anywhere under `IntegrationTests/`.
 
 ### ✅ Correct — test functions
 ```python
-# in unit_test.py or IntegrationTests/
-def test_calculate_operating_time_when_asset_stops():
+def test_myFunction_rejectsInvalidRequest():
     ...
 
-def test_get_asset_by_id_returns_none_for_missing():
+def test_getAssetById_returnsNoneForMissing():
+    ...
+
+def test_calculateOperatingTime_whenAssetStops():
     ...
 ```
 
 ### ❌ Incorrect — flag these test functions
 ```python
-def calculateOperatingTime():        # camelCase, missing test_ prefix — flag both
+def myFunction_rejectsInvalidRequest():  # missing test_ prefix — flag
     ...
 
-def test_calculateOperatingTime():   # test_ present but camelCase body — flag
+def test_my_function_rejects_invalid_request():  # function and behavior use snake_case — flag
     ...
 
-def testCalculateOperatingTime():    # no underscore separator — flag
+def testMyFunction_rejectsInvalidRequest():  # missing underscore after test — flag
+    ...
+
+def test_myFunction_rejects_invalid_request():  # behavior uses snake_case — flag
     ...
 ```
 
