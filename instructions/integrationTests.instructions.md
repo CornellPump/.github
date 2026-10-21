@@ -1,12 +1,3 @@
-/*
- *  Created On: 2026-08-26
- *  Author: Jonathon Hicke
- * 
- *  Last Modified: 2026-08-26
- *  Modified By: Jonathon Hicke
- * 
- *  Copyright 2026 © Cornell Pump Company, All Rights Reserved
- */
 ---
 applyTo: "IntegrationTests/**/*.py"
 ---
