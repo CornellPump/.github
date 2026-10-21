@@ -96,7 +96,10 @@ Tests are an exception to the regular camelCase naming rule. Pytest requires eve
 
 The `test_` prefix and underscore separators are required. The function name and the
 path or behavior being tested must use camelCase. This naming rule applies to all test
-functions, including tests in `unit_test.py` and anywhere under `IntegrationTests/`.
+functions, including tests in `unit_test.py`.
+
+**Exception:** files under `IntegrationTests/` follow `integrationTests.instructions.md`
+for test naming (verb-based, e.g. `test_getRequest`). Do NOT apply this rule there.
 
 ### ✅ Correct — test functions
 ```python
