@@ -328,6 +328,7 @@ result = compute(assetId)  # return early    # lowercase, no period — flag
 - Must end with a period
 - Flag `#word` with no space after `#`
 - Do NOT apply this rule to docstrings (`"""`)
+- Do not apply this rule to the copyright, modify date header.
 
 ---
 
